@@ -14,19 +14,20 @@ class TrustedShopsURL {
      
     if (preg_match('|\[(.*)$|is', $html, $adInfo)){
       if(preg_match_all('|"(\d+)"|is'$adInfo[1], $id) {
-        $shops = '';
+        $shops = array();
         for ($i = 0; $i < count($id); $i++) {
           $link = 'http://www.trustedshops.es/b2c_int/getdata.php?module=shopData&format=json';
           for ($j = 0; $j < 85; $j++) {
             $link += '&shops%5B%5D='.$id[$i];
           }
-          $shops = parseShopURL($link);
+          $shops = parseShopURL($link,$shops);
         }
+        print_r(json_encode($shops));
       }
     }
   }
 
-  function parseShopURL($url) {
+  function parseShopURL($url, $shops) {
     $downloader = new htmlDownloader();
     $html = $downloader->get_html($url);
       
@@ -34,8 +35,9 @@ class TrustedShopsURL {
       for ($i = 0; $i < count($adInfo); $i++) {
         $shopCode = substr($adInfo[$i],strrpos($adInfo[$i], '_'));
         $shop = 'https://www.trustedshops.es/evaluacion/info'.$adInfo[$i]; 
-        //insert api
+        array_push($shops,$shop);
       }
+      return $shops;
     }    
   }
 }

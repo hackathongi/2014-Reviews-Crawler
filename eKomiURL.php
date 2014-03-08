@@ -10,6 +10,7 @@ class eKomiURL {
 
   function nextGoogle($url){
     $finished = 0;
+    $review = array();
     for ($page = 0; $finished = 0; $page = $page + 10) {
       $url += $page;
       $downloader = new htmlDownloader();
@@ -17,12 +18,14 @@ class eKomiURL {
 
       if (preg_match_all('|<cite class="_jd">(https://www\.ekomi\.es/testimonios-[^<]+)</cite>|is', $html, $adInfo)){
         for ($i = 0; $i < count($adInfo); $i++) {
-          //insert api $adInfo[$i];
+          array_push($review,$adInfo[$i]);
         }
       } else {
         $finished = 1;
       }
     }
+    $json = json_encode($review);
+    print_r($json);
   }
 }
 
