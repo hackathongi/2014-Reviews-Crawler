@@ -21,6 +21,7 @@ class trustedShopsImporter
 
     public function run($url_competitor, $shop_id = '')
 	{
+        $url_competitor = preg_replace('|https://www.trustedshops\.[^/]*/[^/]*/|', 'https://www.trustedshops.es/evaluacion/', $url_competitor);
         echo "\nBOT START\n\n";
 
         //DOWNLOAD MAIN HTML
@@ -91,7 +92,7 @@ class trustedShopsImporter
             "shop" => $this->shop,
             "reviews" => $this->reviews
         );
-
+        print_r($results);
         $resultsJson = json_encode($results);
         $com = new comunicadorBDD();
         $com->insertShopAndOpinions($resultsJson, $url_competitor);
