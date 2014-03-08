@@ -16,6 +16,8 @@ class htmlDownloader {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_setopt($ch, CURLOPT_USERAGENT, 'eShoppinion Bot');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_PROXY, '127.0.0.1:9050');
+        curl_setopt($curl, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
         if ($post) {
             curl_setopt($ch, CURLOPT_POST, TRUE);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
