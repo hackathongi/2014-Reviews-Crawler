@@ -8,10 +8,10 @@
 include_once 'template_ekomi.php';
 include_once 'template_trustedShops.php';
 
-$bot = new eKomiImporter();
-$bot->run('https://www.ekomi.es/testimonios-rastreatorcom.html');
+//$bot = new eKomiImporter();
+//$bot->run('https://www.ekomi.es/testimonios-rastreatorcom.html');
 
-//$bot = new trustedShopsImporter();
-//$bot->run('https://www.trustedshops.es/evaluacion/info_X217160A51D572EC38A451806E48ADDDD.html');
+$bot = new trustedShopsImporter();
+$bot->run('https://www.trustedshops.es/evaluacion/info_X217160A51D572EC38A451806E48ADDDD.html');
 
 ?>
