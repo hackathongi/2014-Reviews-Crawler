@@ -19,6 +19,7 @@ class eKomiURL {
     $review = array();
     for ($page = 0; $finished = 1; $page++) {
       $url = 'https://www.google.com/search?q=site:www.ekomi.es/testimonios&hl=en&start=' . $page*10;
+      sleep(10);
       $downloader = new htmlDownloader();
       $html = $downloader->get_html($url);
 
