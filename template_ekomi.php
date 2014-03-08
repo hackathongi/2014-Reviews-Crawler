@@ -32,7 +32,9 @@ class eKomiImporter
         if (preg_match('|<h2 [^>]*class="sectionTitle"[^>]*>\s*Valoraci[^<]*<span[^>]*>([^<]*)</span>|', $shopHtml, $m)){
             $this->shop['SHOP_NAME'] = $m[1];
         }
-        //$this->shop['SHOP_ADDRESS'] = '';
+        if (preg_match('|<p class="shopAddressDetails">([^<]*)<|', $shopHtml, $m)){
+            $this->shop['SHOP_ADDRESS'] = $m[1];
+        }
         if (preg_match('|<div[^>]*>Website:</div>.*<a class="shoplink url" href=[\'"]([^\'"]*)[\'"]|isU', $shopHtml, $m)){
             $this->shop['SHOP_URL'] = $m[1];
         }
@@ -41,6 +43,7 @@ class eKomiImporter
         if (preg_match('|<strong>Tel:</strong>([^<]*)<|isU', $shopHtml, $m)){
             $this->shop['SHOP_PHONE'] = $m[1];
         }
+
         //$this->shop['SHOP_EMAIL'] = '';
         if (preg_match('|<img [^>]*src="(/images/shoplogos/[^"]*)"|isU', $shopHtml, $m)){
             $this->shop['SHOP_LOGO'] = 'https://www.ekomi.es/' . $m[1];
@@ -67,8 +70,16 @@ class eKomiImporter
             $mainHtml = $downloader->get_html($nextUrl);
         }
 
-        print_r($this->shop);
-        print_r($this->reviews);
+        $results = array (
+            "shop" => $this->cleanElem($this->shop),
+            "reviews" => $this->reviews
+        );
+        $xml = new SimpleXMLElement('<root/>');
+        array_walk_recursive($test_array, array ($xml, 'addChild'));
+        print $xml->asXML();
+
+        $resultsJson = json_encode($results);
+        print_r($resultsJson);
     }
 
     function mapReview($reviewHtml) {
@@ -91,10 +102,17 @@ class eKomiImporter
         //$review['USER_NAME'] = '';
         //$review['USER_SURNAME'] = '';
         //$review['USER_EMAIL'] = '';
+
+        $this->cleanElem($review);
         $this->reviews[] = $review;
 
     }
 
+    function cleanElem(&$elem){
+        foreach ($elem as $key => $value){
+            $elem[$key] = trim($value);
+        }
+    }
     function myStripTags($html){
         $html = preg_replace('|</?\w[^>]*>|', ' ', $html);
         $html = preg_replace('|\s+|', ' ', $html);
