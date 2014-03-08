@@ -13,4 +13,5 @@ include_once 'template_trustedShops.php';
 
 $bot = new trustedShopsImporter();
 $bot->run('https://www.trustedshops.es/evaluacion/info_XE6858272B93E59E044B95103208AC479.html');
+
 ?>
