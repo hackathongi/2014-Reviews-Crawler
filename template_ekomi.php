@@ -9,6 +9,8 @@
 // Includes
 include_once 'constants.php';
 include_once 'htmlDownloader.php';
+include_once 'helper.php';
+include_once 'comunicadorBDD.php';
 
 class eKomiImporter
 {
@@ -28,7 +30,7 @@ class eKomiImporter
         $mainUrl = $url_competitor;
         $mainHtml = $downloader->get_html($mainUrl);
 
-        $shopHtml = $this->encodeHTML($mainHtml);
+        $shopHtml = encodeHTML($mainHtml, $this->encoding);
         if (preg_match('|xml:lang="([^"]*)"|', $shopHtml, $m)){
             $this->languange = $m[1];
         }
@@ -37,7 +39,7 @@ class eKomiImporter
             $this->shop[SHOP_NAME] = $m[1];
         }
         if (preg_match('|<p class="shopAddressDetails">(.*)</p>|isU', $shopHtml, $m)){
-            $this->shop[SHOP_ADDRESS] = $this->myStripTags($m[1]);
+            $this->shop[SHOP_ADDRESS] = myStripTags($m[1]);
         }
         if (preg_match('|<div[^>]*>Website:</div>.*<a class="shoplink url" href=[\'"]([^\'"]*)[\'"]|isU', $shopHtml, $m)){
             $this->shop[SHOP_URL] = $m[1];
@@ -74,7 +76,7 @@ class eKomiImporter
             $mainHtml = $downloader->get_html($nextUrl);
         }
 
-        $this->cleanElem($this->shop);
+        cleanElem($this->shop);
 
         $results = array (
             "shop" => $this->shop,
@@ -82,17 +84,18 @@ class eKomiImporter
         );
 
         $resultsJson = json_encode($results);
-        $this->insertShopAndOpinions($resultsJson, $url_competitor);
+        $com = new comunicadorBDD();
+        $com->insertShopAndOpinions($resultsJson, $url_competitor);
     }
 
     function mapReview($reviewHtml) {
-        $reviewHtml = $this->encodeHTML($reviewHtml);
+        $reviewHtml = encodeHTML($reviewHtml, $this->encoding);
         $review = array();
         if (preg_match('|<div [^>]*class="whiteBoxT2InnerRight"[^>]*>(.*)</div>|isU', $reviewHtml, $m)){
-            $review[DESCRIPTION] = $this->myStripTags($m[1]);
+            $review[DESCRIPTION] = myStripTags($m[1]);
         }
         if (preg_match('|<div [^>]*class="smallGradeWrapper right"[^>]*>\s*<span>([^<]*)</span>|isU', $reviewHtml, $m)){
-            $rating = $this->convertRating($m[1]);
+            $rating = convertRating($m[1], $this->competitorMaxRate);
             if ($rating){
                 $review[RATING] = $rating;
             }
@@ -106,39 +109,11 @@ class eKomiImporter
         //$review[USER_SURNAME] = '';
         //$review[USER_EMAIL] = '';
 
-        $this->cleanElem($review);
+        cleanElem($review);
         $this->reviews[] = $review;
 
     }
 
-    function cleanElem(&$elem){
-        foreach ($elem as $key => $value){
-            $elem[$key] = trim($value);
-        }
-    }
-    function myStripTags($html){
-        $html = preg_replace('|</?\w[^>]*>|', ' ', $html);
-        $html = preg_replace('|\s+|', ' ', $html);
-        return trim($html);
-    }
-
-    function convertRating($rating){
-        $rating = trim($rating);
-        return $rating*MAX_RATING/$this->competitorMaxRate;
-    }
-
-    function encodeHTML($html){
-        return iconv($this->encoding, "UTF-8", $html);
-    }
-
-    function insertShopAndOpinions($json, $url_competitor){
-        $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/Crawler';
-        $sortida = $downloader->get_html($url, $json); //PETICION API 1ç
-        $url = 'http://api.eshopinion.cat/POST/Crawler'; //SETEAR TIENDA COMO PARSEADA
-        $sortida = $downloader->get_html($url, $url_competitor); //PETICION API 2
-        print_r($sortida);
-    }
 }
 
 ?>

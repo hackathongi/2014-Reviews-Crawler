@@ -9,6 +9,7 @@
 // Includes
 include_once 'constants.php';
 include_once 'htmlDownloader.php';
+include_once 'comunicadorBDD.php';
 
 class trustedShopsImporter
 {
@@ -32,7 +33,7 @@ class trustedShopsImporter
 
         $shopUrl = str_replace('evaluacion', 'perfil', $mainUrl);
         $shopHtml2 = $downloader->get_html($shopUrl);
-        $shopHtml = $this->encodeHTML($mainHtml);
+        $shopHtml = encodeHTML($mainHtml, $this->encoding);
         //SHOP
         if (preg_match('|<h1><span itemprop="name">(.*)</span>|isU', $shopHtml, $m)){
             $this->shop[SHOP_NAME] = $m[1];
@@ -84,7 +85,7 @@ class trustedShopsImporter
             $mainHtml = $downloader->get_html($nextUrl);
         }
 
-        $this->cleanElem($this->shop);
+        cleanElem($this->shop);
 
         $results = array (
             "shop" => $this->shop,
@@ -92,17 +93,18 @@ class trustedShopsImporter
         );
 
         $resultsJson = json_encode($results);
-        $this->insertShopAndOpinions($resultsJson);
+        $com = new comunicadorBDD();
+        $com->insertShopAndOpinions($resultsJson, $url_competitor);
 
     }
 
     function mapReview($reviewHtml) {
         $review = array();
         if (preg_match('|<p class="the_statement">(.*)</p>|isU', $reviewHtml, $m)){
-            $review[DESCRIPTION] = $this->myStripTags($m[1]);
+            $review[DESCRIPTION] = myStripTags($m[1]);
         }
         if (preg_match('|mini_(\d+)\.gif"|isU', $reviewHtml, $m)){
-            $rating = $this->convertRating($m[1]);
+            $rating = convertRating($m[1], $this->competitorMaxRate);
             if ($rating){
                 $review[RATING] = $rating;
             }
@@ -116,37 +118,11 @@ class trustedShopsImporter
         //$review[USER_SURNAME] = '';
         //$review[USER_EMAIL] = '';
 
-        $this->cleanElem($review);
+        cleanElem($review);
         $this->reviews[] = $review;
 
     }
 
-    function cleanElem(&$elem){
-        foreach ($elem as $key => $value){
-            $elem[$key] = trim($value);
-        }
-    }
-    function myStripTags($html){
-        $html = preg_replace('|</?\w[^>]*>|', ' ', $html);
-        $html = preg_replace('|\s+|', ' ', $html);
-        return trim($html);
-    }
-
-    function convertRating($rating){
-        $rating = trim($rating);
-        return $rating*MAX_RATING/$this->competitorMaxRate;
-    }
-
-    function encodeHTML($html){
-        return iconv($this->encoding, "UTF-8", $html);
-    }
-
-    function insertShopAndOpinions($json){
-        $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/Crawler';
-        $sortida = $downloader->get_html($url, $json);
-        print_r($sortida);
-    }
 }
 
 ?>
