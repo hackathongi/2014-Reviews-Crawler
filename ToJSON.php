@@ -7,7 +7,7 @@ include_once 'constants.php';
 public function ReviewsToJSON($shop, $review, $filepath){
     $shopObject = array(
     	if (isset($shop[SHOP_NAME])) SHOP_NAME => trim($shop[SHOP_NAME]);
-    	if (isset($shop[ADDRESS])) ADDRESS => trim($shop[ADDRESS]);
+    	if (isset($shop[SHOP_ADDRESS])) SHOP_ADDRESS => trim($shop[SHOP_ADDRESS]);
 		if (isset($shop[SHOP_URL])) SHOP_URL => trim($shop[SHOP_URL]);
 		if (isset($shop[SHOP_URL_COMPETITOR])) SHOP_URL_COMPETITOR => trim($shop[SHOP_URL_COMPETITOR]);
 		if (isset($shop[SHOP_ID])) SHOP_ID => trim($shop[SHOP_ID]);
@@ -32,3 +32,5 @@ public function ReviewsToJSON($shop, $review, $filepath){
 		fwrite($handle, $jsonContent);
 	}
 }
+
+?>
