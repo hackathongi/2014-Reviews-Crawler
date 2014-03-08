@@ -43,7 +43,7 @@ class comunicadorBDD
     function insertShopAndOpinions($json, $url_competitor){
         print_r($json);
         $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/Crawler';
+        $url = 'http://api-test.eshopinion.com/POST/Crawler';
         $sortida = $downloader->get_html($url, $json);
         $this->setAsParsered($url_competitor);
     }
@@ -67,7 +67,7 @@ class comunicadorBDD
      */
     function insertNewCompetitors($json){
         $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/NewCompetitor';
+        $url = 'http://api-test.eshopinion.com/POST/NewCompetitor';
         $sortida = $downloader->get_html($url, $json);
     }
 
@@ -75,14 +75,14 @@ class comunicadorBDD
 
     function setAsParsered($url_competitor){
         $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/IsParsered';
+        $url = 'http://api-test.eshopinion.com/POST/IsParsered';
         $sortida = $downloader->get_html($url, $url_competitor);
     }
 
     //Esta funcion coje el siguiente url competitor que no esta ya parseado
     function getNextShopCompetitor(){
         $downloader = new htmlDownloader();
-        $url = 'http://api.eshopinion.cat/POST/Crawler/GetNextShopCompetitor';
+        $url = 'http://api-test.eshopinion.com/POST/GetNextShopCompetitor';
         return $url_competitor = $downloader->get_html($url);
     }
 
