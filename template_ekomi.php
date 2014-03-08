@@ -33,6 +33,7 @@ class eKomiImporter
         $shopHtml = encodeHTML($mainHtml, $this->encoding);
         if (preg_match('|xml:lang="([^"]*)"|', $shopHtml, $m)){
             $this->languange = $m[1];
+            $this->shop[SHOP_LANGUAGE] = $m[1];
         }
         //SHOP
         if (preg_match('|<h2 [^>]*class="sectionTitle"[^>]*>[^<]*<span[^>]*>([^<]*)</span>|', $shopHtml, $m)){
@@ -82,7 +83,7 @@ class eKomiImporter
             "shop" => $this->shop,
             "reviews" => $this->reviews
         );
-
+        print_r($results);
         $resultsJson = json_encode($results);
         $com = new comunicadorBDD();
         $com->insertShopAndOpinions($resultsJson, $url_competitor);

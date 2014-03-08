@@ -18,6 +18,7 @@ define('SHOP_ID', 'shop_id');
 define('SHOP_PHONE', 'shop_phone');
 define('SHOP_EMAIL', 'shop_email');
 define('SHOP_LOGO', 'shop_logo');
+define('SHOP_LANGUAGE', 'shop_language');
 
 //REVIEW
 define('DESCRIPTION', 'description');

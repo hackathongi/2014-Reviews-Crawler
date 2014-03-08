@@ -41,7 +41,6 @@ class comunicadorBDD
      */
 
     function insertShopAndOpinions($json, $url_competitor){
-        print_r($json);
         $downloader = new htmlDownloader();
         $url = 'http://api-test.eshopinion.com/POST/Crawler';
         $sortida = $downloader->get_html($url, $json);

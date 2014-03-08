@@ -30,6 +30,7 @@ class trustedShopsImporter
         $mainHtml = $downloader->get_html($mainUrl);
         if (preg_match('|<meta name="language" content="([^"]*)"|', $mainHtml, $m)){
             $this->languange = $m[1];
+            $this->shop[SHOP_LANGUAGE] = $m[1];
         }
 
         $shopUrl = str_replace('evaluacion', 'perfil', $mainUrl);
@@ -92,7 +93,7 @@ class trustedShopsImporter
             "shop" => $this->shop,
             "reviews" => $this->reviews
         );
-        print_r($results);
+
         $resultsJson = json_encode($results);
         $com = new comunicadorBDD();
         $com->insertShopAndOpinions($resultsJson, $url_competitor);
