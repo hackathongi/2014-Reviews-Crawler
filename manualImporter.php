@@ -12,6 +12,6 @@ include_once 'template_trustedShops.php';
 //$bot->run('https://www.ekomi.es/testimonios-rastreatorcom.html');
 
 $bot = new trustedShopsImporter();
-$bot->run('https://www.trustedshops.es/evaluacion/info_XE6858272B93E59E044B95103208AC479.html');
+$bot->run('https://www.trustedshops.es/evaluacion/info_X217160A51D572EC38A451806E48ADDDD.html');
 
 ?>
