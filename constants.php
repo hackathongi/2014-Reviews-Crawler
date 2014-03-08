@@ -7,7 +7,7 @@
  */
 
 //MAX_RATING
-define('MAX_RATING', 'max_rating');
+define('MAX_RATING', 5);
 
 //SHOP
 define('SHOP_NAME', 'shop_name');

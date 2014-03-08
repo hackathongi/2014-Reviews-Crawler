@@ -1,0 +1,13 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: alex@volcanicinternet.cat
+ * Date: 3/8/14
+ * Time: 9:53 AM
+ */
+include_once 'template_ekomi.php';
+
+$bot = new eKomiImporter();
+$bot->run('https://www.ekomi.es/testimonios-rastreatorcom.html');
+
+?>
