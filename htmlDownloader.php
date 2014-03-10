@@ -14,7 +14,7 @@ class htmlDownloader {
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'eShoppinion Bot');
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:27.0) Gecko/20100101 Firefox/27.0');
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         //curl_setopt($ch, CURLOPT_PROXY, '127.0.0.1:9050');  //PARA UN FUTURO USAR TOR
         //curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);   //PARA UN FUTURO USAR TOR
